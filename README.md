@@ -1,2 +1,2 @@
 # passage-java
-Java SDK for Passage (1Password)
+Java Server SDK for Passage (1Password)
