@@ -10,36 +10,56 @@ import com.passageidentity.passage.http.PassageHttpClient;
 import com.passageidentity.passage.http.PassageHttpClientImpl;
 import com.passageidentity.passage.util.PassageConstants;
 
-public class AppImpl implements App{
+public class AppImpl implements App {
 
-  AppBean appBean;
-  public AppImpl(AppBean appBean){
-    this.appBean=appBean;
+  private final AppBean appBean;
+
+  public AppImpl(AppBean appBean) {
+    this.appBean = appBean;
   }
 
   /**
-   * @return 
+   * @return
    */
   @Override
-  public AppInfoBean getInfo() throws Exception {
-    PassageHttpClient passageHttpClient=new PassageHttpClientImpl();
-    HTTPResponse<AppInfoBean> response = passageHttpClient.get(PassageConstants.PASSAGE_BASE_URL + "/apps/" + appBean.getId(), new TypeReference<AppInfoBean>(){});
+  public AppInfoBean getInfo() throws PassageError {
+    PassageHttpClient passageHttpClient = new PassageHttpClientImpl();
+    HTTPResponse<AppInfoBean> response;
+    try {
+      response = passageHttpClient.get(PassageConstants.PASSAGE_BASE_URL + "/apps/" + appBean.getId(),
+          new TypeReference<AppInfoBean>() {
+          });
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new PassageError("network error: failed to get Passage App Info");
+    }
+
     if (response.getStatusCode() != 200) {
-      throw new PassageError("Failed to get Passage App Info", response.getStatusCode(), response.getStatusText(), response.getError().getErrorText());
+      throw new PassageError("Failed to get Passage App Info", response.getStatusCode(), response.getStatusText(),
+          response.getError().getErrorText());
     }
     return response.getBody();
   }
 
   /**
-   * @return 
+   * @return
    */
   @Override
-  public MagicLinkBean createMagicLink(CreateMagicLinkBodyBean createMagicLinkBodyBean) throws Exception {
-    PassageHttpClient passageHttpClient=new PassageHttpClientImpl();
+  public MagicLinkBean createMagicLink(CreateMagicLinkBodyBean createMagicLinkBodyBean) throws PassageError {
+    PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
+    HTTPResponse<MagicLinkBean> response;
+    try {
+      response = passageHttpClient.post(
+          PassageConstants.PASSAGE_BASE_URL + "/apps/" + appBean.getId() + "/magic-links/", createMagicLinkBodyBean,
+          new TypeReference<MagicLinkBean>() {
+          });
+    } catch (Exception e) {
+      throw new PassageError("network error: failed to create Passage Magic Link");
+    }
 
-    HTTPResponse<MagicLinkBean> response = passageHttpClient.post(PassageConstants.PASSAGE_BASE_URL + "/apps/" + appBean.getId() + "/magic-links/", createMagicLinkBodyBean, new TypeReference<MagicLinkBean>(){});
     if (response.getStatusCode() != 201) {
-      throw new PassageError("Failed to create Passage Magic Link", response.getStatusCode(), response.getStatusText(), response.getError().getErrorText());
+      throw new PassageError("Failed to create Passage Magic Link", response.getStatusCode(), response.getStatusText(),
+          response.getError().getErrorText());
     }
 
     return response.getBody();

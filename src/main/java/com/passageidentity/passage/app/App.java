@@ -7,8 +7,8 @@ import com.passageidentity.passage.exception.PassageError;
 
 public interface App {
 
-  public AppInfoBean getInfo() throws Exception;
+  AppInfoBean getInfo() throws PassageError;
 
-  public MagicLinkBean createMagicLink(CreateMagicLinkBodyBean createMagicLinkBodyBean) throws Exception;
+  MagicLinkBean createMagicLink(CreateMagicLinkBodyBean createMagicLinkBodyBean) throws PassageError;
 
 }

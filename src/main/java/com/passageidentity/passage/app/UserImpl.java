@@ -3,6 +3,7 @@ package com.passageidentity.passage.app;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.passageidentity.passage.app.bean.CreateUserBodyBean;
 import com.passageidentity.passage.app.bean.DeviceBean;
+import com.passageidentity.passage.app.bean.DeviceListBean;
 import com.passageidentity.passage.app.bean.UpdateBodyBean;
 import com.passageidentity.passage.app.bean.UserBean;
 import com.passageidentity.passage.exception.PassageError;
@@ -12,10 +13,11 @@ import com.passageidentity.passage.http.PassageHttpClientImpl;
 import com.passageidentity.passage.http.exception.HTTPError;
 import com.passageidentity.passage.util.PassageConstants;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserImpl implements User {
 
-  AppBean appBean;
+  final AppBean appBean;
 
 
   public UserImpl(AppBean appBean) {
@@ -28,11 +30,11 @@ public class UserImpl implements User {
   @Override
   public UserBean getUser(String userID) throws PassageError {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
-    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "%s/users/%s", appBean.getId(), userID);
+    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "/apps/%s/users/%s", appBean.getId(), userID);
     HTTPResponse<UserBean> response = null;
     try {
       response = passageHttpClient.get(
-          PassageConstants.PASSAGE_BASE_URL + "/apps/" + appBean.getId(), new TypeReference<UserBean>(){});
+          url, new TypeReference<UserBean>(){});
     } catch (Exception e) {
       throw new PassageError("network error: failed to get Passage User");
     }
@@ -170,14 +172,15 @@ public class UserImpl implements User {
    * @return
    */
   @Override
-  public ArrayList<DeviceBean> listUserDevices(String userID) throws PassageError{
+  public List<DeviceBean> listUserDevices(String userID) throws PassageError{
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
-    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "%s/users/%s/devices", appBean.getId(), userID);
-    HTTPResponse<ArrayList<DeviceBean>> response = null;
+    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "/apps/%s/users/%s/devices", appBean.getId(), userID);
+    HTTPResponse<DeviceListBean> response = null;
     try {
       response = passageHttpClient.get(
-          url, new TypeReference<ArrayList<DeviceBean>>(){});
+          url, new TypeReference<DeviceListBean>(){});
     } catch (Exception e) {
+      e.printStackTrace();
       throw new PassageError("network error: failed to list devices for a Passage User");
     }
     if (response.getStatusCode() == 404) {
@@ -186,7 +189,7 @@ public class UserImpl implements User {
       throw new PassageError("failed to list devices for a Passage User", response.getStatusCode(),
           response.getStatusText(), response.getError().getErrorText());
     }
-    return response.getBody();
+    return response.getBody().getDevices();
 
   }
 
@@ -198,7 +201,7 @@ public class UserImpl implements User {
   @Override
   public boolean revokeUserDevice(String userID, String deviceID) throws PassageError{
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
-    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "%s/users/%s/devices/%s", appBean.getId(), userID,deviceID);
+    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "/apps/%s/users/%s/devices/%s", appBean.getId(), userID,deviceID);
     HTTPResponse<ArrayList<DeviceBean>> response = null;
     try {
       response = passageHttpClient.delete(
@@ -224,12 +227,13 @@ public class UserImpl implements User {
   @Override
   public boolean signOut(String userID) throws PassageError {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
-    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "%s/users/%s/token/", appBean.getId(), userID);
+    String url = String.format(PassageConstants.PASSAGE_BASE_URL + "/apps/%s/users/%s/token/", appBean.getId(), userID);
     HTTPResponse<HTTPError> response = null;
     try {
       response = passageHttpClient.delete(
           url, new TypeReference<HTTPError>(){});
     } catch (Exception e) {
+      e.printStackTrace();
       throw new PassageError("network error: failed to revoke all refresh tokens for a Passage User");
     }
     if (response.getStatusCode() == 404) {

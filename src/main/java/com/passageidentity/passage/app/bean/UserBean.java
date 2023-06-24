@@ -1,9 +1,12 @@
 package com.passageidentity.passage.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import java.util.Date;
 import java.util.Map;
-
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonRootName("user")
 public class UserBean {
   public static final String UserIDDoesNotExist = "passage User with ID %s does not exist";
 
@@ -111,4 +114,19 @@ public class UserBean {
     this.userMetadata = userMetadata;
   }
 
+
+  @Override
+  public String toString() {
+    return "UserBean{" +
+        "ID='" + ID + '\'' +
+        ", status=" + status +
+        ", email='" + email + '\'' +
+        ", phone='" + phone + '\'' +
+        ", emailVerified=" + emailVerified +
+        ", phoneVerified=" + phoneVerified +
+        ", createdAt=" + createdAt +
+        ", lastLogin=" + lastLogin +
+        ", userMetadata=" + userMetadata +
+        '}';
+  }
 }

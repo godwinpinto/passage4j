@@ -15,15 +15,10 @@ import java.text.ParseException;
 
 public class AuthImpl implements Auth {
 
-  AppBean appBean;
+  private final AppBean appBean;
 
   public AuthImpl(AppBean appBean) {
     this.appBean = appBean;
-  }
-  @Override
-  public String authenticateRequest() {
-
-    return "";
   }
 
   @Override
@@ -67,7 +62,7 @@ public class AuthImpl implements Auth {
         throw new PassageError("Claim 'sub' is not present");
       }
 
-      return "";
+      return userID;
     } catch (Exception e) {
       throw new PassageError(e.getMessage());
     }

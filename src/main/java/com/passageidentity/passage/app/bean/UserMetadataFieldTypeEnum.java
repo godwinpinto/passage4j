@@ -1,18 +1,31 @@
 package com.passageidentity.passage.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public enum UserMetadataFieldTypeEnum {
   @JsonProperty("string")
-  STRING,
+  STRING("string"),
   @JsonProperty("boolean")
-  BOOLEAN,
+  BOOLEAN("boolean"),
   @JsonProperty("integer")
-  NUMBER,
+  NUMBER("integer"),
   @JsonProperty("date")
-  DATE,
+  DATE("date"),
   @JsonProperty("phone")
-  PHONE,
+  PHONE("phone"),
   @JsonProperty("email")
-  EMAIL
+  EMAIL("email");
+
+  private final String value;
+
+  UserMetadataFieldTypeEnum(String value) {
+    this.value = value;
+  }
+
+  public String getValue() {
+    return value;
+  }
 }

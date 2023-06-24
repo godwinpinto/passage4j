@@ -1,25 +1,24 @@
 package com.passageidentity.passage.app;
 
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import com.passageidentity.passage.exception.PassageError;
-import com.passageidentity.passage.util.PassageConstants;
-import java.io.IOException;
-import java.net.URL;
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PassageNew implements Passage{
 
-  AppBean appBean;
+  private final App app;
 
+  private final User user;
+
+  private final Auth auth;
 
 
   public PassageNew(String appID, PassageConfig config) throws PassageError {
-    appBean=new AppBean();
+    AppBean appBean = new AppBean();
     appBean.setId(appID);
     appBean.setConfig(config);
+    PassageKeyManager.fetchJWKS(appID);
+    this.app=new AppImpl(appBean);
+    this.auth=new AuthImpl(appBean);
+    this.user=new UserImpl(appBean);
   }
 
   /**
@@ -27,7 +26,7 @@ public class PassageNew implements Passage{
    */
   @Override
   public App app() {
-    return null;
+    return app;
   }
 
   /**
@@ -35,7 +34,7 @@ public class PassageNew implements Passage{
    */
   @Override
   public User user() {
-    return null;
+    return user;
   }
 
   /**
@@ -43,7 +42,7 @@ public class PassageNew implements Passage{
    */
   @Override
   public Auth auth() {
-    return null;
+    return auth;
   }
 
 

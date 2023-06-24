@@ -19,16 +19,15 @@ public final class PassageKeyManager {
 
   private static final Map<String, JWKSet> passageJWKCache=new HashMap<String,JWKSet>();
 
-  public static JWKSet fetchJWKS(String appID) throws PassageError {
+  public static void fetchJWKS(String appID) throws PassageError {
     JWKSet cachedJWKS = passageJWKCache.get(appID);
     if (cachedJWKS != null) {
-      return cachedJWKS;
+      return;
     }
     try {
       URL jwksURL = new URL(String.format(PassageConstants.PASSAGE_JWKS_URL, appID));
       JWKSet jwkSet = JWKSet.load(jwksURL);
       passageJWKCache.put(appID, jwkSet);
-      return jwkSet;
     }catch(IOException | ParseException exception){
       throw new PassageError("failed to fetch jwks");
     }
@@ -39,8 +38,7 @@ public final class PassageKeyManager {
     if (!(header instanceof JWSHeader jse)) {
       throw new PassageError("Expecting JWS header");
     }
-    JWSHeader jwsHeader = (JWSHeader) header;
-    String keyID = jwsHeader.getKeyID();
+    String keyID = jse.getKeyID();
     if (keyID == null) {
       throw new Exception("Expecting JWT header to have a 'kid' string");
     }
@@ -56,8 +54,7 @@ public final class PassageKeyManager {
       }
     }
 
-    RSAPublicKey publicKey = ((RSAKey) key).toRSAPublicKey();
-    return publicKey;
+    return ((RSAKey) key).toRSAPublicKey();
   }
 
 }

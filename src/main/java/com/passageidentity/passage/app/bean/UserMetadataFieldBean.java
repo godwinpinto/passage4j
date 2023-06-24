@@ -1,14 +1,32 @@
 package com.passageidentity.passage.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class UserMetadataFieldBean {
-  public String id;
+  @JsonProperty("id")
+  private String id;
   @JsonProperty("field_name")
-  public String fieldName;
-  public UserMetadataFieldTypeEnum type;
+  private String fieldName;
+  @JsonProperty("type")
+  private UserMetadataFieldTypeEnum type;
   @JsonProperty("friendly_name")
-  public String friendlyName;
-  public boolean registration;
-  public boolean profile;
+  private String friendlyName;
+  @JsonProperty("registration")
+  private boolean registration;
+  @JsonProperty("profile")
+  private boolean profile;
+
+  @Override
+  public String toString() {
+    return "UserMetadataFieldBean{" +
+        "id='" + id + '\'' +
+        ", fieldName='" + fieldName + '\'' +
+        ", type=" + type +
+        ", friendlyName='" + friendlyName + '\'' +
+        ", registration=" + registration +
+        ", profile=" + profile +
+        '}';
+  }
 }

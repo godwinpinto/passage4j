@@ -1,7 +1,11 @@
 package com.passageidentity.passage.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import java.util.Date;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class DeviceBean {
 
@@ -85,5 +89,18 @@ public class DeviceBean {
 
   public void setLastLoginAt(Date lastLoginAt) {
     this.lastLoginAt = lastLoginAt;
+  }
+
+  @Override
+  public String toString() {
+    return "DeviceBean{" +
+        "ID='" + ID + '\'' +
+        ", credID='" + credID + '\'' +
+        ", name='" + name + '\'' +
+        ", usageCount=" + usageCount +
+        ", updatedAt=" + updatedAt +
+        ", createdAt=" + createdAt +
+        ", lastLoginAt=" + lastLoginAt +
+        '}';
   }
 }

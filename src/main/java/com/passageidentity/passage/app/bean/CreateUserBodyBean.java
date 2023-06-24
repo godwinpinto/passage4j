@@ -1,8 +1,11 @@
 package com.passageidentity.passage.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateUserBodyBean {
   @JsonProperty("email")
   private String email;

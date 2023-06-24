@@ -1,7 +1,9 @@
 package com.passageidentity.passage.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public class UpdateBodyBean {
   @JsonProperty("email")
@@ -40,5 +42,14 @@ public class UpdateBodyBean {
 
   public void setUserMetadata(Map<String, Object> userMetadata) {
     this.userMetadata = userMetadata;
+  }
+
+  @Override
+  public String toString() {
+    return "UpdateBodyBean{" +
+        "email='" + email + '\'' +
+        ", phone='" + phone + '\'' +
+        ", userMetadata=" + userMetadata +
+        '}';
   }
 }

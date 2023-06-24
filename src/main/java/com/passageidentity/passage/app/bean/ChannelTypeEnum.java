@@ -1,10 +1,22 @@
 package com.passageidentity.passage.app.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+@JsonIgnoreProperties(ignoreUnknown = true)
 
 public enum ChannelTypeEnum {
   @JsonProperty("email")
-  EMAIL,
+  EMAIL ("email"),
   @JsonProperty("phone")
-  PHONE
+  PHONE ("phone");
+  private final String value;
+
+  ChannelTypeEnum(String value) {
+    this.value = value;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
 }
