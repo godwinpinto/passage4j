@@ -21,6 +21,7 @@ com/passageidentity/passage/app/UserImpl$2.class
 com/passageidentity/passage/app/bean/LayoutsBean.class
 com/passageidentity/passage/app/PassageKeyManager.class
 com/passageidentity/passage/app/bean/CreateUserBodyBean.class
+com/passageidentity/passage/http/PassageHttpClientImpl2.class
 com/passageidentity/passage/app/AppImpl$1.class
 com/passageidentity/passage/app/AppImpl.class
 com/passageidentity/passage/app/UserImpl$4.class
