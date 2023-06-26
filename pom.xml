@@ -35,15 +35,36 @@
   <distributionManagement>
     <snapshotRepository>
       <id>godwinpinto</id>
-      <url>https://packagecloud.io/content/repositories/snapshots</url>
+      <url>https://packagecloud.io/godwinpinto/passage4j/java/maven2/snapshots</url>
     </snapshotRepository>
     <repository>
       <id>godwinpinto</id>
-      <url>https://packagecloud.io/service/local/staging/deploy/maven2/</url>
+      <url>https://packagecloud.io/godwinpinto/passage4j/java/maven2</url>
     </repository>
   </distributionManagement>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <doctitle>Passage-4J 0.0.1 SDK</doctitle>
+          <outputDirectory>${project.basedir}/docs/api</outputDirectory>
+          <additionalOptions>
+            <option>-Xdoclint:none</option>
+          </additionalOptions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -87,7 +108,7 @@
   </description>
   <groupId>com.passageidentity.passage4j</groupId>
   <modelVersion>4.0.0</modelVersion>
-  <name>Passage4J Core</name>
+  <name>Passage-4J Core</name>
   <packaging>jar</packaging>
   <properties>
     <java.version>17</java.version>

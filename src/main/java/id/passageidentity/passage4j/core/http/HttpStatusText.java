@@ -1,7 +1,16 @@
 package id.passageidentity.passage4j.core.http;
 
+/**
+ * Provides utility methods to retrieve the status text for a given HTTP status code.
+ */
 public class HttpStatusText {
 
+  /**
+   * Returns the status text for the given HTTP status code.
+   *
+   * @param statusCode The HTTP status code.
+   * @return The status text corresponding to the status code.
+   */
   public static String getStatusText(int statusCode) {
     return switch (statusCode) {
       case 100 -> "Continue";

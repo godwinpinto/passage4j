@@ -10,39 +10,61 @@ import id.passageidentity.passage4j.core.http.PassageHttpClient;
 import id.passageidentity.passage4j.core.http.PassageHttpClientImpl;
 import id.passageidentity.passage4j.core.util.PassageConstants;
 
+/**
+ * Implementation of the {@link App} interface.
+ */
 class AppImpl implements App {
 
   private final AppBean appBean;
 
+  /**
+   * Constructs an instance of {@link AppImpl} with the specified {@link AppBean}.
+   *
+   * @param appBean the {@link AppBean} representing the app
+   */
   public AppImpl(AppBean appBean) {
     this.appBean = appBean;
   }
 
   /**
-   * @return
+   * Retrieves information about the app.
+   *
+   * @return the {@link AppInfoBean} containing the app information
+   * @throws PassageException if there is an error retrieving the app information
    */
   @Override
   public AppInfoBean getInfo() throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl();
     HTTPResponse<AppInfoBean> response;
     try {
-      response = passageHttpClient.get(PassageConstants.PASSAGE_APP_INFO_URL + appBean.getId(),
+      response = passageHttpClient.get(
+          PassageConstants.PASSAGE_APP_INFO_URL + appBean.getId(),
           new TypeReference<AppInfoBean>() {
-          });
+          }
+      );
     } catch (Exception e) {
       e.printStackTrace();
       throw new PassageException("network error: failed to get Passage App Info");
     }
 
     if (response.getStatusCode() != 200) {
-      throw new PassageException("Failed to get Passage App Info", response.getStatusCode(), response.getStatusText(),
-          response.getError().getErrorText());
+      throw new PassageException(
+          "Failed to get Passage App Info",
+          response.getStatusCode(),
+          response.getStatusText(),
+          response.getError().getErrorText()
+      );
     }
+
     return response.getBody();
   }
 
   /**
-   * @return
+   * Creates a magic link for the specified body.
+   *
+   * @param createMagicLinkBodyBean the body for creating the magic link
+   * @return the {@link MagicLinkBean} representing the created magic link
+   * @throws PassageException if there is an error creating the magic link
    */
   @Override
   public MagicLinkBean createMagicLink(CreateMagicLinkBodyBean createMagicLinkBodyBean) throws PassageException {
@@ -50,18 +72,23 @@ class AppImpl implements App {
     HTTPResponse<MagicLinkBean> response;
     String url = String.format(PassageConstants.PASSAGE_CREATE_MAGIC_LINK_URL, appBean.getId());
     try {
-      response = passageHttpClient.post(url
-          , createMagicLinkBodyBean,
+      response = passageHttpClient.post(
+          url,
+          createMagicLinkBodyBean,
           new TypeReference<MagicLinkBean>() {
-          });
+          }
+      );
     } catch (Exception e) {
       throw new PassageException("network error: failed to create Passage Magic Link");
     }
 
     if (response.getStatusCode() != 201) {
-      throw new PassageException("Failed to create Passage Magic Link", response.getStatusCode(),
+      throw new PassageException(
+          "Failed to create Passage Magic Link",
+          response.getStatusCode(),
           response.getStatusText(),
-          response.getError().getErrorText());
+          response.getError().getErrorText()
+      );
     }
 
     return response.getBody();

@@ -15,20 +15,32 @@ import id.passageidentity.passage4j.core.util.PassageConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UserImpl is an implementation of the User interface.
+ */
 class UserImpl implements User {
 
   final AppBean appBean;
 
 
+  /**
+   * Constructor for UserImpl class.
+   *
+   * @param appBean The AppBean object.
+   */
   public UserImpl(AppBean appBean) {
     this.appBean = appBean;
   }
 
   /**
-   * @param userID
+   * Retrieves the user information for the given userID.
+   *
+   * @param userID The ID of the user.
+   * @return The UserBean object containing the user information.
+   * @throws PassageException If there is an error retrieving the user info.
    */
   @Override
-  public UserBean getUser(String userID) throws PassageException {
+  public UserBean getInfo(String userID) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_GET_USER_INFO_URL, appBean.getId(), userID);
     HTTPResponse<UserBean> response = null;
@@ -48,11 +60,14 @@ class UserImpl implements User {
   }
 
   /**
-   * @param userID
-   * @return
+   * Activates the user with the given userID.
+   *
+   * @param userID The ID of the user.
+   * @return The UserBean object of the activated user.
+   * @throws PassageException If there is an error activating the user.
    */
   @Override
-  public UserBean activateUser(String userID) throws PassageException {
+  public UserBean activate(String userID) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_ACTIVATE_USER_URL, appBean.getId(), userID);
     HTTPException httpException = new HTTPException();
@@ -74,11 +89,14 @@ class UserImpl implements User {
   }
 
   /**
-   * @param userID
-   * @return
+   * Deactivates the user with the given userID.
+   *
+   * @param userID The ID of the user.
+   * @return The UserBean object of the deactivated user.
+   * @throws PassageException If there is an error deactivating the user.
    */
   @Override
-  public UserBean deactivateUser(String userID) throws PassageException {
+  public UserBean deactivate(String userID) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_DEACTIVATE_USER_URL, appBean.getId(), userID);
     HTTPException httpException = new HTTPException();
@@ -100,12 +118,15 @@ class UserImpl implements User {
   }
 
   /**
-   * @param userID
-   * @param updateBodyBean
-   * @return
+   * Updates the user with the given userID using the provided updateBodyBean.
+   *
+   * @param userID          The ID of the user.
+   * @param updateBodyBean  The UpdateBodyBean object containing the updated user attributes.
+   * @return The UserBean object of the updated user.
+   * @throws PassageException If there is an error updating the user attributes.
    */
   @Override
-  public UserBean updateUser(String userID, UpdateBodyBean updateBodyBean) throws PassageException {
+  public UserBean update(String userID, UpdateBodyBean updateBodyBean) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_UPDATE_USER_URL, appBean.getId(), userID);
     HTTPResponse<UserBean> response;
@@ -126,11 +147,14 @@ class UserImpl implements User {
   }
 
   /**
-   * @param userID
-   * @return
+   * Deletes the user with the given userID.
+   *
+   * @param userID The ID of the user.
+   * @return True if the user is successfully deleted, false otherwise.
+   * @throws PassageException If there is an error deleting the user.
    */
   @Override
-  public boolean deleteUser(String userID) throws PassageException {
+  public boolean delete(String userID) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_DELETE_USER_URL, appBean.getId(), userID);
     HTTPResponse<ArrayList<DeviceBean>> response = null;
@@ -151,11 +175,14 @@ class UserImpl implements User {
   }
 
   /**
-   * @param createUserBodyBean
-   * @return
+   * Creates a new user using the provided createUserBodyBean.
+   *
+   * @param createUserBodyBean The CreateUserBodyBean object containing the user details.
+   * @return The UserBean object of the created user.
+   * @throws PassageException If there is an error creating the user.
    */
   @Override
-  public UserBean createUser(CreateUserBodyBean createUserBodyBean) throws PassageException {
+  public UserBean create(CreateUserBodyBean createUserBodyBean) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_CREATE_USER_URL, appBean.getId());
     HTTPResponse<UserBean> response = null;
@@ -173,11 +200,14 @@ class UserImpl implements User {
   }
 
   /**
-   * @param userID
-   * @return
+   * Retrieves the list of devices for the user with the given userID.
+   *
+   * @param userID The ID of the user.
+   * @return The list of DeviceBean objects representing the user's devices.
+   * @throws PassageException If there is an error retrieving the user's devices.
    */
   @Override
-  public List<DeviceBean> listUserDevices(String userID) throws PassageException {
+  public List<DeviceBean> listDevices(String userID) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_GET_USER_DEVICES_URL, appBean.getId(), userID);
     HTTPResponse<DeviceListBean> response = null;
@@ -199,13 +229,17 @@ class UserImpl implements User {
 
   }
 
+
   /**
-   * @param userID
-   * @param deviceID
-   * @return
+   * Revokes the device with the given deviceID for the user with the given userID.
+   *
+   * @param userID   The ID of the user.
+   * @param deviceID The ID of the device to be revoked.
+   * @return True if the device is successfully revoked, false otherwise.
+   * @throws PassageException If there is an error revoking the device.
    */
   @Override
-  public boolean revokeUserDevice(String userID, String deviceID) throws PassageException {
+  public boolean revokeDevice(String userID, String deviceID) throws PassageException {
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_REVOKE_USER_DEVICE_URL, appBean.getId(), userID, deviceID);
     HTTPResponse<ArrayList<DeviceBean>> response = null;
@@ -229,8 +263,11 @@ class UserImpl implements User {
   }
 
   /**
-   * @param userID
-   * @return
+   * Signs out the user with the given userID by revoking all refresh tokens.
+   *
+   * @param userID The ID of the user.
+   * @return True if all refresh tokens are successfully revoked, false otherwise.
+   * @throws PassageException If there is an error revoking the refresh tokens.
    */
   @Override
   public boolean signOut(String userID) throws PassageException {

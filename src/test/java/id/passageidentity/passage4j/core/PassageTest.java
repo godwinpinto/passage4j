@@ -56,7 +56,7 @@ public class PassageTest {
       System.out.println(userBean3.toString());
 */
       System.out.println("-----------Get User------------");
-      UserBean userBean4=passage.user().getUser("hLq1SpDYFNI6GOMWVjFiDo3f");
+      UserBean userBean4=passage.user().getInfo("hLq1SpDYFNI6GOMWVjFiDo3f");
       System.out.println(userBean4.toString());
       /*
       System.out.println("-----------Update User------------");

@@ -15,10 +15,19 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manager class for Passage JWT key operations.
+ */
 final class PassageKeyManager {
 
-  private static final Map<String, JWKSet> passageJWKCache = new HashMap<String, JWKSet>();
+  private static final Map<String, JWKSet> passageJWKCache = new HashMap<>();
 
+  /**
+   * Fetches the JWKS (JSON Web Key Set) for the specified app ID.
+   *
+   * @param appID the ID of the app
+   * @throws PassageException if an error occurs while fetching the JWKS
+   */
   public static void fetchJWKS(String appID) throws PassageException {
     JWKSet cachedJWKS = passageJWKCache.get(appID);
     if (cachedJWKS != null) {
@@ -29,10 +38,18 @@ final class PassageKeyManager {
       JWKSet jwkSet = JWKSet.load(jwksURL);
       passageJWKCache.put(appID, jwkSet);
     } catch (IOException | ParseException exception) {
-      throw new PassageException("failed to fetch jwks");
+      throw new PassageException("Failed to fetch JWKS");
     }
   }
 
+  /**
+   * Retrieves the public key for the specified app ID and JWT token.
+   *
+   * @param appID the ID of the app
+   * @param token the JWT token
+   * @return the RSA public key
+   * @throws Exception if an error occurs while retrieving the public key
+   */
   public static RSAPublicKey getPublicKey(String appID, JWT token) throws Exception {
     Header header = token.getHeader();
     if (!(header instanceof JWSHeader jse)) {
@@ -57,5 +74,5 @@ final class PassageKeyManager {
 
     return ((RSAKey) key).toRSAPublicKey();
   }
-
 }
+

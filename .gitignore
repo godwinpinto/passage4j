@@ -1,2 +1,2 @@
 .idea/**
-/src/main/java/id/passageidentity/passage4j/core/gpt/**
+.target/**

@@ -9,33 +9,59 @@ import com.nimbusds.jwt.SignedJWT;
 import id.passageidentity.passage4j.core.exception.PassageException;
 import id.passageidentity.passage4j.core.util.PassageConstants;
 
+/**
+ * The AuthImpl class implements the Auth interface and provides authentication and authorization functionality.
+ */
 class AuthImpl implements Auth {
 
   private final AppBean appBean;
 
+  /**
+   * Constructs a new AuthImpl object.
+   *
+   * @param appBean The application bean used for authentication.
+   */
   public AuthImpl(AppBean appBean) {
     this.appBean = appBean;
   }
 
+  /**
+   * Authenticates a request using the authorization header token.
+   *
+   * @param authorizationToken The authorization token provided in the request header.
+   * @return The authenticated user's information.
+   * @throws PassageException If there is an error during the authentication process.
+   */
   @Override
   public String authenticateRequestWithAuthHeader(String authorizationToken) throws PassageException {
-    if (authorizationToken == null || authorizationToken.trim().equals("") || !authorizationToken.startsWith(
-        "Bearer")) {
+    if (authorizationToken == null || authorizationToken.trim().equals("") || !authorizationToken.startsWith("Bearer")) {
       throw new PassageException("missing authentication token: expected \"Bearer\" header");
     }
     return validateAuthToken(authorizationToken.substring("Bearer".length()).trim());
   }
 
+  /**
+   * Authenticates a request using a cookie.
+   *
+   * @param cookie_name_psg_auth_token The name of the cookie containing the authentication token.
+   * @return The authenticated user's information.
+   * @throws PassageException If there is an error during the authentication process.
+   */
   @Override
   public String authenticateRequestWithCookie(String cookie_name_psg_auth_token) throws PassageException {
     if (cookie_name_psg_auth_token == null || cookie_name_psg_auth_token.equals("")) {
-      throw new Error(
-          "missing authentication token: expected \"" + PassageConstants.AUTH_TOKEN_COOKIE_NAME + "\" cookie");
+      throw new Error("missing authentication token: expected \"" + PassageConstants.AUTH_TOKEN_COOKIE_NAME + "\" cookie");
     }
     return validateAuthToken(cookie_name_psg_auth_token.trim());
-
   }
 
+  /**
+   * Validates an authentication token.
+   *
+   * @param authToken The authentication token to be validated.
+   * @return The validated user's information.
+   * @throws PassageException If the authentication token is invalid or expired.
+   */
   @Override
   public String validateAuthToken(String authToken) throws PassageException {
     try {
@@ -52,6 +78,7 @@ class AuthImpl implements Auth {
       if (!isTokenVerified) {
         throw new PassageException("JWT token verification failed");
       }
+
       // Extract claims from the JWT
       JWTClaimsSet claimsSet = jwtToken.getJWTClaimsSet();
       String userID = claimsSet.getSubject();
