@@ -9,16 +9,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public enum UserMetadataFieldTypeEnum {
   // Represents a string value
+  @JsonProperty("string")
   STRING("string"),
   // Represents a boolean value
+  @JsonProperty("boolean")
   BOOLEAN("boolean"),
   // Represents an integer value
+  @JsonProperty("integer")
   NUMBER("integer"),
   // Represents a date value
+  @JsonProperty("date")
   DATE("date"),
   // Represents a phone number value
+  @JsonProperty("phone")
   PHONE("phone"),
   // Represents an email address value
+  @JsonProperty("email")
   EMAIL("email");
 
   private final String value;

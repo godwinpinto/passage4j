@@ -8,8 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public enum UserStatusEnum {
+  @JsonProperty("active")
   ACTIVE("active"),     // The user is active
+  @JsonProperty("inactive")
   INACTIVE("inactive"), // The user is inactive
+  @JsonProperty("pending")
   PENDING("pending");   // The user is pending
 
   private final String value;

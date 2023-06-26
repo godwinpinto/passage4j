@@ -3,6 +3,7 @@ package id.passageidentity.passage4j.core;
 import id.passageidentity.passage4j.core.app.Passage;
 import id.passageidentity.passage4j.core.app.PassageConfig;
 import id.passageidentity.passage4j.core.app.PassageNew;
+import id.passageidentity.passage4j.core.bean.AppInfoBean;
 import id.passageidentity.passage4j.core.bean.UserBean;
 import id.passageidentity.passage4j.core.exception.PassageException;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,24 +28,24 @@ public class PassageTest {
 
     try {
 
-/*
-      AppInfoBean appInfoBean=psg.app().getInfo();
+
+      AppInfoBean appInfoBean=passage.app().getInfo();
       System.out.println("-----------App Info------------");
       System.out.println(appInfoBean.toString());
-      System.out.println("-----------Create Magic link------------");
+/*    System.out.println("-----------Create Magic link------------");
 
       CreateMagicLinkBodyBean createMagicLinkBodyBean=new CreateMagicLinkBodyBean();
       createMagicLinkBodyBean.setChannel(ChannelTypeEnum.EMAIL);
       createMagicLinkBodyBean.setLanguage("en");
       createMagicLinkBodyBean.setMagicLinkPath("http://localhost:8080");
-      createMagicLinkBodyBean.setEmail("godwin.pinto86@gmail.com");
+      createMagicLinkBodyBean.setEmail("passage@passage.com");
       createMagicLinkBodyBean.setTtl(300);
       createMagicLinkBodyBean.setRedirectUrl("http://localhost:8080/hello");
       MagicLinkBean magicLinkBean=psg.app().createMagicLink(createMagicLinkBodyBean);
       System.out.println(magicLinkBean.toString());
       System.out.println("-----------Create User------------");
       CreateUserBodyBean createUserBodyBean=new CreateUserBodyBean();
-      createUserBodyBean.setEmail("godwin.pinto3@cmss.in");
+      createUserBodyBean.setEmail("passage@passage.com");
       createUserBodyBean.setPhone("+919999999997");
       UserBean userBean=psg.user().createUser(createUserBodyBean);
       System.out.println(userBean.toString());
@@ -56,7 +57,7 @@ public class PassageTest {
       System.out.println(userBean3.toString());
 */
       System.out.println("-----------Get User------------");
-      UserBean userBean4=passage.user().getInfo("hLq1SpDYFNI6GOMWVjFiDo3f");
+      UserBean userBean4=passage.user().getInfo("1hp7aqZFFbHU6cws4cU8yoHO");
       System.out.println(userBean4.toString());
       /*
       System.out.println("-----------Update User------------");
