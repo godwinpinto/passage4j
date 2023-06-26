@@ -106,7 +106,7 @@
   </dependencies>
   <description>Java SDK for Passage Identity(1Password)
   </description>
-  <groupId>com.passageidentity.passage4j</groupId>
+  <groupId>id.passageidentity.passage4j</groupId>
   <modelVersion>4.0.0</modelVersion>
   <name>Passage-4J Core</name>
   <packaging>jar</packaging>
