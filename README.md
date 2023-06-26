@@ -117,8 +117,12 @@ Refer to code_of_conduct.md
 Refer to /docs/api
 
 ### ToDo
-1. Test Cases
-2. Proxy implementation for Passage Wrapper client
-3. Logging using slf4J
-4. Migration test to lower version of java, probably JDK1.8
+- [ ] Test classes
+- [ ] Proxy implementation for Passage Wrapper client
+- [ ] Logging using slf4J
+- [ ] Migration test to lower version of java, probably JDK1.8
+- [ ] Moving project to maven (needs passage teams support)
+- [ ] GitHub CI pipeline to push directly to maven
+- [ ] Jacoco test coverage integration
+- [ ] Sonar source integration for code quality
 
