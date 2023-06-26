@@ -34,15 +34,22 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <id>godwinpinto</id>
-      <url>https://packagecloud.io/godwinpinto/passage4j/java/maven2/snapshots</url>
+      <id>packagecloud-godwinpinto</id>
+      <url>packagecloud+https://packagecloud.io/godwinpinto/passage4j</url>
     </snapshotRepository>
     <repository>
-      <id>godwinpinto</id>
-      <url>https://packagecloud.io/godwinpinto/passage4j/java/maven2</url>
+      <id>packagecloud-godwinpinto</id>
+      <url>packagecloud+https://packagecloud.io/godwinpinto/passage4j</url>
     </repository>
   </distributionManagement>
   <build>
+    <extensions>
+      <extension>
+        <groupId>io.packagecloud.maven.wagon</groupId>
+        <artifactId>maven-packagecloud-wagon</artifactId>
+        <version>0.0.6</version>
+      </extension>
+    </extensions>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

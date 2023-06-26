@@ -114,7 +114,7 @@ Refer to CONTRIBUTING.md
 Refer to code_of_conduct.md
 
 ### Java Documentation
-Refer to /docs/api
+Refer to https://godwinpinto.github.io/passage4j/api/index.html
 
 ### ToDo
 - [ ] Test classes
