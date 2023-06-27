@@ -1,4 +1,4 @@
-# Passage-4J
+# Passage4J
 A Java SDK for Passage
 
 ## Description
