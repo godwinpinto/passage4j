@@ -35,7 +35,7 @@ class AuthImpl implements Auth {
   @Override
   public String authenticateRequestWithAuthHeader(String authorizationToken) throws PassageException {
     if (authorizationToken == null || authorizationToken.trim().equals("") || !authorizationToken.startsWith("Bearer")) {
-      throw new PassageException("missing authentication token: expected \"Bearer\" header");
+      throw new PassageException("missing authentication token: expected \"Bearer\" header",401,"","");
     }
     return validateAuthToken(authorizationToken.substring("Bearer".length()).trim());
   }
@@ -50,7 +50,7 @@ class AuthImpl implements Auth {
   @Override
   public String authenticateRequestWithCookie(String cookie_name_psg_auth_token) throws PassageException {
     if (cookie_name_psg_auth_token == null || cookie_name_psg_auth_token.equals("")) {
-      throw new Error("missing authentication token: expected \"" + PassageConstants.AUTH_TOKEN_COOKIE_NAME + "\" cookie");
+      throw new PassageException("missing authentication token: expected \"" + PassageConstants.AUTH_TOKEN_COOKIE_NAME + "\" cookie",401,"","");
     }
     return validateAuthToken(cookie_name_psg_auth_token.trim());
   }
@@ -70,25 +70,25 @@ class AuthImpl implements Auth {
 
       // Verify the token using the public key
       if (!(jwtToken instanceof SignedJWT signedJWT)) {
-        throw new PassageException("Invalid signed JWT token");
+        throw new PassageException("Invalid signed JWT token",401,"","");
       }
       JWSVerifier verifier = new RSASSAVerifier(PassageKeyManager.getPublicKey(appBean.getId(), jwtToken));
       boolean isTokenVerified = signedJWT.verify(verifier);
 
       if (!isTokenVerified) {
-        throw new PassageException("JWT token verification failed");
+        throw new PassageException("JWT token verification failed",401,"","");
       }
 
       // Extract claims from the JWT
       JWTClaimsSet claimsSet = jwtToken.getJWTClaimsSet();
       String userID = claimsSet.getSubject();
       if (userID == null) {
-        throw new PassageException("Claim 'sub' is not present");
+        throw new PassageException("Claim 'sub' is not present",401,"","");
       }
 
       return userID;
     } catch (Exception e) {
-      throw new PassageException(e.getMessage());
+      throw new PassageException(e.getMessage(),401,"","");
     }
   }
 }

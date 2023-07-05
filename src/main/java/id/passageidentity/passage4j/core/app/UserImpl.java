@@ -41,6 +41,11 @@ class UserImpl implements User {
    */
   @Override
   public UserBean getInfo(String userID) throws PassageException {
+
+    if(userID==null || userID.trim().isEmpty()){
+        throw new PassageException("User ID cannot be empty", 400, "","");
+    }
+
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_GET_USER_INFO_URL, appBean.getId(), userID);
     HTTPResponse<UserBean> response = null;
@@ -49,12 +54,20 @@ class UserImpl implements User {
           url, new TypeReference<UserBean>() {
           });
     } catch (Exception e) {
-      throw new PassageException("network error: failed to get Passage User");
+      throw new PassageException("network error: failed to get Passage User",
+              400, "", e.getMessage());
     }
     if (response.getStatusCode() == 404) {
-      throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID));
+      throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID),
+              response.getStatusCode(),
+              response.getStatusText(),
+              response.getError().getErrorText());
     } else if (response.getStatusCode() != 200) {
-      throw new PassageException("Failed to get Passage User: " + response.getStatusCode());
+      throw new PassageException("Failed to get Passage User: " + response.getStatusCode(),
+              response.getStatusCode(),
+              response.getStatusText(),
+              response.getError().getErrorText()
+      );
     }
     return response.getBody();
   }
@@ -68,6 +81,10 @@ class UserImpl implements User {
    */
   @Override
   public UserBean activate(String userID) throws PassageException {
+    if(userID==null || userID.trim().isEmpty()){
+      throw new PassageException("User ID cannot be empty", 400, "","");
+    }
+
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_ACTIVATE_USER_URL, appBean.getId(), userID);
     HTTPException httpException = new HTTPException();
@@ -76,7 +93,7 @@ class UserImpl implements User {
       response = passageHttpClient.patch(url, httpException, new TypeReference<UserBean>() {
       });
     } catch (Exception e) {
-      throw new PassageException("network error: failed to activate Passage User");
+      throw new PassageException("network error: failed to activate Passage User",400,"",e.getMessage());
     }
     if (response.getStatusCode() == 404) {
       throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID), response.getStatusCode(),
@@ -97,6 +114,10 @@ class UserImpl implements User {
    */
   @Override
   public UserBean deactivate(String userID) throws PassageException {
+    if(userID==null || userID.trim().isEmpty()){
+      throw new PassageException("User ID cannot be empty", 400, "","");
+    }
+
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_DEACTIVATE_USER_URL, appBean.getId(), userID);
     HTTPException httpException = new HTTPException();
@@ -105,7 +126,7 @@ class UserImpl implements User {
       response = passageHttpClient.patch(url, httpException, new TypeReference<UserBean>() {
       });
     } catch (Exception e) {
-      throw new PassageException("network error: failed to deactivate Passage User");
+      throw new PassageException("network error: failed to deactivate Passage User",400, "", e.getMessage());
     }
     if (response.getStatusCode() == 404) {
       throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID), response.getStatusCode(),
@@ -127,6 +148,10 @@ class UserImpl implements User {
    */
   @Override
   public UserBean update(String userID, UpdateBodyBean updateBodyBean) throws PassageException {
+    if(userID==null || userID.trim().isEmpty()){
+      throw new PassageException("User ID cannot be empty", 400, "","");
+    }
+
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_UPDATE_USER_URL, appBean.getId(), userID);
     HTTPResponse<UserBean> response;
@@ -134,7 +159,7 @@ class UserImpl implements User {
       response = passageHttpClient.patch(url, updateBodyBean, new TypeReference<UserBean>() {
       });
     } catch (Exception e) {
-      throw new PassageException("network error: failed to update Passage User attributes");
+      throw new PassageException("network error: failed to update Passage User attributes",400, "", e.getMessage());
     }
     if (response.getStatusCode() == 404) {
       throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID), response.getStatusCode(),
@@ -155,6 +180,10 @@ class UserImpl implements User {
    */
   @Override
   public boolean delete(String userID) throws PassageException {
+    if(userID==null || userID.trim().isEmpty()){
+      throw new PassageException("User ID cannot be empty", 400, "","");
+    }
+
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_DELETE_USER_URL, appBean.getId(), userID);
     HTTPResponse<ArrayList<DeviceBean>> response = null;
@@ -162,7 +191,7 @@ class UserImpl implements User {
       response = passageHttpClient.delete(
           url, null);
     } catch (Exception e) {
-      throw new PassageException("network error: could not delete Passage User");
+      throw new PassageException("network error: could not delete Passage User",400, "", e.getMessage());
     }
     if (response.getStatusCode() == 404) {
       throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID), response.getStatusCode(),
@@ -190,7 +219,7 @@ class UserImpl implements User {
       response = passageHttpClient.post(url, createUserBodyBean, new TypeReference<UserBean>() {
       });
     } catch (Exception e) {
-      throw new PassageException("network error: failed to get Passage User");
+      throw new PassageException("network error: failed to get Passage User",400, "", e.getMessage());
     }
     if (response.getStatusCode() != 201) {
       throw new PassageException("failed to create Passage User", response.getStatusCode(),
@@ -208,6 +237,10 @@ class UserImpl implements User {
    */
   @Override
   public List<DeviceBean> listDevices(String userID) throws PassageException {
+    if(userID==null || userID.trim().isEmpty()){
+      throw new PassageException("User ID cannot be empty", 400, "","");
+    }
+
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_GET_USER_DEVICES_URL, appBean.getId(), userID);
     HTTPResponse<DeviceListBean> response = null;
@@ -216,8 +249,7 @@ class UserImpl implements User {
           url, new TypeReference<DeviceListBean>() {
           });
     } catch (Exception e) {
-      e.printStackTrace();
-      throw new PassageException("network error: failed to list devices for a Passage User");
+      throw new PassageException("network error: failed to list devices for a Passage User",400, "", e.getMessage());
     }
     if (response.getStatusCode() == 404) {
       throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID));
@@ -240,6 +272,13 @@ class UserImpl implements User {
    */
   @Override
   public boolean revokeDevice(String userID, String deviceID) throws PassageException {
+    if(userID==null || userID.trim().isEmpty()){
+      throw new PassageException("User ID cannot be empty", 400, "","");
+    }
+    if(deviceID==null || deviceID.trim().isEmpty()){
+      throw new PassageException("Device ID cannot be empty", 400, "","");
+    }
+
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_REVOKE_USER_DEVICE_URL, appBean.getId(), userID, deviceID);
     HTTPResponse<ArrayList<DeviceBean>> response = null;
@@ -247,7 +286,7 @@ class UserImpl implements User {
       response = passageHttpClient.delete(
           url, null);
     } catch (Exception e) {
-      throw new PassageException("network error: failed to delete a device for a Passage User");
+      throw new PassageException("network error: failed to delete a device for a Passage User",400, "", e.getMessage());
     }
     if (response.getStatusCode() == 404) {
       throw new PassageException(
@@ -271,6 +310,9 @@ class UserImpl implements User {
    */
   @Override
   public boolean signOut(String userID) throws PassageException {
+    if(userID==null || userID.trim().isEmpty()){
+      throw new PassageException("User ID cannot be empty", 400, "","");
+    }
     PassageHttpClient passageHttpClient = new PassageHttpClientImpl(appBean.getConfig().getApiKey());
     String url = String.format(PassageConstants.PASSAGE_SIGNOUT_USER_URL, appBean.getId(), userID);
     HTTPResponse<HTTPException> response = null;
@@ -279,8 +321,7 @@ class UserImpl implements User {
           url, new TypeReference<HTTPException>() {
           });
     } catch (Exception e) {
-      e.printStackTrace();
-      throw new PassageException("network error: failed to revoke all refresh tokens for a Passage User");
+      throw new PassageException("network error: failed to revoke all refresh tokens for a Passage User",400, "", e.getMessage());
     }
     if (response.getStatusCode() == 404) {
       throw new PassageException(String.format(UserBean.UserIDDoesNotExist, userID), response.getStatusCode(),

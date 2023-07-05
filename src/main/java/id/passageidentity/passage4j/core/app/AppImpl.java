@@ -42,9 +42,10 @@ class AppImpl implements App {
           new TypeReference<AppInfoBean>() {
           }
       );
+    } catch (PassageException passageException) {
+      throw passageException;
     } catch (Exception e) {
-      e.printStackTrace();
-      throw new PassageException("network error: failed to get Passage App Info");
+      throw new PassageException("network error: failed to get Passage App Info",400, "",e.getMessage());
     }
 
     if (response.getStatusCode() != 200) {
@@ -78,8 +79,10 @@ class AppImpl implements App {
           new TypeReference<MagicLinkBean>() {
           }
       );
-    } catch (Exception e) {
-      throw new PassageException("network error: failed to create Passage Magic Link");
+    } catch (PassageException passageException) {
+      throw passageException;
+    }catch (Exception e) {
+      throw new PassageException("network error: failed to create Passage Magic Link",400,"",e.getMessage());
     }
 
     if (response.getStatusCode() != 201) {

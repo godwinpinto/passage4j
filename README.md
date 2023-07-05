@@ -116,13 +116,44 @@ Refer to code_of_conduct.md
 ### Java Documentation
 Refer to https://godwinpinto.github.io/passage4j/api/index.html
 
+### Testing
+Integration tests have been completed, which provides class wise 60% line code coverage.
+To perform tests, please follow below instruction
+```shell
+# set the below environment variables
+export PASSAGE_APP_ID=<YOUR_PASSAGE_APP_ID>
+export PASSAGE_API_KEY=<YOUR_PASSAGE_API_KEY>
+
+# This id is the passage user id that is the registered user and actively logged in
+# and has a device mapped + logged in to test signout, list device and signout
+export PASSAGE_APP_USER_ID=<PASSAGE_USER_ID>
+
+# use passage example app and deploy to get token from your browser of user PASSAGE_APP_USER_ID
+export PASSAGE_USER_TOKEN=<SAMPLE_NON_EXPIRED_TOKEN>
+
+# Any email address which is not yet registered user under your passage app account
+export DUMMY_EMAIL_FOR_MAGIC_LINK=<EMAIL_ADDRESS>
+
+# email address of PASSAGE_APP_USER_ID
+export DUMMY_EMAIL_EXISTS=<EMAIL_ADDRESS>
+
+# Any email address which is not yet registered user under your passage app account
+export DUMMY_EMAIL_FOR_FULL_CYCLE=<EMAIL_ADDRESS>
+```
+
+```shell
+# command to run tests and generate code coverage report 
+mvn clean verify
+```
+
+
 ### ToDo
-- [ ] Test classes
+- [x] Test classes (Integration Tests included with minimum code coverage set to 60% line wise)
 - [ ] Proxy implementation for Passage Wrapper client
 - [ ] Logging using slf4J
 - [ ] Migration test to lower version of java, probably JDK1.8
 - [ ] Moving project to maven (needs passage teams support)
 - [ ] GitHub CI pipeline to push directly to maven
-- [ ] Jacoco test coverage integration
+- [x] Jacoco test coverage (mvn clean verify)
 - [ ] Sonar source integration for code quality
 

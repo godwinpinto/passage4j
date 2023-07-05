@@ -9,6 +9,19 @@ import java.util.StringJoiner;
 public class PassageException extends Exception {
 
   private final String message;
+
+  public int getStatusCode() {
+    return statusCode;
+  }
+
+  public String getStatusText() {
+    return statusText;
+  }
+
+  public String getErrorText() {
+    return errorText;
+  }
+
   private int statusCode = 0;
   private String statusText = "";
   private String errorText = "";

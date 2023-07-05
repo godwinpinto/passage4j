@@ -1,14 +1,13 @@
 package id.passageidentity.passage4j.core.http;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.*;
 import id.passageidentity.passage4j.core.http.exception.HTTPException;
 import id.passageidentity.passage4j.core.util.PassageConstants;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -22,10 +21,6 @@ import java.time.Duration;
 public class PassageHttpClientImpl implements PassageHttpClient {
 
   private HttpClient client;
-
-  private static final ObjectMapper objectMapper = new ObjectMapper();
-  private static final ObjectReader objectReader = objectMapper.reader();
-  private static final ObjectWriter objectWriter = objectMapper.writer();
 
   private String authorizationHeader;
 
@@ -76,7 +71,7 @@ public class PassageHttpClientImpl implements PassageHttpClient {
       httpResponse.setStatusText(HttpStatusText.getStatusText(response.statusCode()));
 
       if (response.statusCode() >= 200 && response.statusCode() < 300) {
-        if (responseType != null && response.body() != null) {
+        if (responseType != null && response.body() != null && !response.body().isEmpty()) {
           String responseBody = response.body();
           T deserializedBody = deserializeResponse(responseBody, responseType);
           httpResponse.setBody(deserializedBody);
@@ -124,7 +119,15 @@ public class PassageHttpClientImpl implements PassageHttpClient {
    */
   @Override
   public <T> HTTPResponse<T> post(String url, Object requestBody, TypeReference<T> responseType) throws Exception {
-    String jsonBody = objectWriter.writeValueAsString(requestBody);
+
+    boolean hasRootNameAnnotation = requestBody != null && requestBody.getClass().isAnnotationPresent(JsonRootName.class);
+    String jsonBody;
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    ObjectWriter objectWriter = hasRootNameAnnotation
+            ? objectMapper.writer().withRootName(requestBody.getClass().getAnnotation(JsonRootName.class).value())
+            : objectMapper.writer();
+      jsonBody = objectWriter.writeValueAsString(requestBody);
     HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8);
     HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
         .POST(body)
@@ -162,7 +165,13 @@ public class PassageHttpClientImpl implements PassageHttpClient {
    */
   @Override
   public <T> HTTPResponse<T> patch(String url, Object requestBody, TypeReference<T> responseType) throws Exception {
-    String jsonBody = objectWriter.writeValueAsString(requestBody);
+    boolean hasRootNameAnnotation = requestBody != null && requestBody.getClass().isAnnotationPresent(JsonRootName.class);
+    String jsonBody;
+    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectWriter objectWriter = hasRootNameAnnotation
+            ? objectMapper.writer().withRootName(requestBody.getClass().getAnnotation(JsonRootName.class).value())
+            : objectMapper.writer();
+    jsonBody = objectWriter.writeValueAsString(requestBody);
     HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8);
     HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
         .method("PATCH", body)
@@ -222,9 +231,11 @@ public class PassageHttpClientImpl implements PassageHttpClient {
   private <T> T deserializeResponse(String responseBody, TypeReference<T> responseType)
       throws IOException, ClassNotFoundException {
     Class<?> clazz = Class.forName(responseType.getType().getTypeName());
+    ObjectMapper objectMapper = new ObjectMapper();
     if (clazz.isAnnotationPresent(JsonRootName.class)) {
       objectMapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
     }
     return objectMapper.readValue(responseBody, responseType);
   }
+
 }

@@ -94,5 +94,5 @@ public class PassageConstants {
    * URL for signing out a user.
    * Replace "%s" with the app ID and user ID.
    */
-  public static final String PASSAGE_SIGNOUT_USER_URL = PassageConstants.PASSAGE_BASE_URL + "/apps/%s/users/%s/token/";
+  public static final String PASSAGE_SIGNOUT_USER_URL = PassageConstants.PASSAGE_BASE_URL + "/apps/%s/users/%s/tokens/";
 }
